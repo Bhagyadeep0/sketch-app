@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <script defer src="app.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="content">
+        <h1>Canvas</h1>
+        <ul>
+          <button id="square">Square</button>
+          <button id="circle">Circle</button>
+          <button id="free">Free Style</button>
+          <button id="reset">Reset Canvas</button>
+        </ul>
+        <!-- paint mode -->
+        <ul>
+          <button id="pen">Pen</button>
+          <button id="eraser">Eraser</button>
+        </ul>
+        <ul>
+          <!-- custom line width -->
+          <div id="draggable">
+            <!-- pen width -->
+            <div class="penSize">
+              <label for="points">Pen Width</label>
+              <input
+                type="range"
+                id="penRange"
+                name="range"
+                value="1"
+                min="1"
+                max="10"
+              />
+            </div>
+            <!-- eraser width -->
+            <div class="eraserSize">
+              <label for="points">Eraser Width</label>
+              <input
+                type="range"
+                id="eraserRange"
+                name="range"
+                value="5"
+                min="5"
+                max="20"
+              />
+            </div>
+          </div>
+        </ul>
+        <!-- color container -->
+        <div class="colorBox-container">
+          <div class="colorBox">
+            <label for="red">Red</label>
+            <input type="radio" name="color" id="red" />
+          </div>
+          <div class="colorBox">
+            <label for="green">Green</label>
+            <input type="radio" name="color" id="green" />
+          </div>
+          <div class="colorBox">
+            <label for="blue">Blue</label>
+            <input type="radio" name="color" id="blue" />
+          </div>
+          <div class="colorBox">
+            <label>Custom</label>
+            <input type="color" name="color" id="customColor" />
+          </div>
+        </div>
+      </div>
+
+      <canvas id="canvas"></canvas>
+    </div>
+  </body>
+</html>
