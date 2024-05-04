@@ -3,14 +3,14 @@ const ctx = canvas.getContext("2d");
 
 const square = document.getElementById("square");
 
-
-
 window.addEventListener("load", () => {
   resize();
   document.addEventListener("mousedown", startPaint);
   document.addEventListener("mouseup", stopPaint);
   document.addEventListener("mousemove", sketch);
-  document.getElementById("reset").addEventListener("click", ()=>location.reload()); // reset canvas
+  document
+    .getElementById("reset")
+    .addEventListener("click", () => location.reload()); // reset canvas
 
   document
     .getElementById("customColor")
@@ -19,14 +19,12 @@ window.addEventListener("load", () => {
   document
     .getElementById("eraserRange")
     .addEventListener("mouseout", eraserWidth);
-  document.getElementById("eraser").addEventListener("click", () => {
-    isPenInUse = false;
-    console.log(isPenInUse);
-  });
-  document.getElementById("pen").addEventListener("click", () => {
-    isPenInUse = true;
-    console.log(isPenInUse);
-  });
+  document
+    .getElementById("eraser")
+    .addEventListener("click", () => (isPenInUse = false));
+  document
+    .getElementById("pen")
+    .addEventListener("click", () => (isPenInUse = true));
 });
 
 // initial mode = pen
@@ -45,8 +43,8 @@ let paint = false;
 
 // resize canvas on load
 function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth - 500;
+  canvas.height = window.innerHeight - 100;
 }
 
 //custom color function
@@ -62,7 +60,6 @@ function eraserWidth(e) {
   eraserLine = e.target.value;
 }
 
-
 // mouse position
 function getPosition(e) {
   // position change on scroll
@@ -74,8 +71,6 @@ function getPosition(e) {
   mouse.x = e.clientX - canvas.offsetLeft;
   mouse.y = e.clientY - canvas.offsetTop;
 }
-
-
 
 function startPaint(e) {
   paint = true;
@@ -97,6 +92,7 @@ function sketch(e) {
   if (isPenInUse) {
     ctx.lineWidth = penLine;
     ctx.strokeStyle = color;
+    ctx.globalCompositeOperation = "source-over";
     ctx.moveTo(mouse.x, mouse.y);
     getPosition(e);
     ctx.lineTo(mouse.x, mouse.y);
@@ -112,4 +108,23 @@ function sketch(e) {
     ctx.lineTo(mouse.x, mouse.y);
     ctx.stroke();
   }
+}
+
+// -------------save as image-------------------------
+
+// Convert canvas to image
+document.getElementById('saveImg').addEventListener("click", function() {
+
+  var dataURL = canvas.toDataURL("image/png");
+
+  saveAsImg(dataURL, 'untitled.png');
+});
+
+// Save | Download image
+function saveAsImg(data, filename = 'untitled.png') {
+  var a = document.createElement('a');
+  a.href = data;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
 }
