@@ -15,25 +15,31 @@ window.addEventListener("load", () => {
   document
     .getElementById("customColor")
     .addEventListener("mouseout", customColor);
-  document.getElementById("penRange").addEventListener("mouseout", penWidth);
-  document
-    .getElementById("eraserRange")
-    .addEventListener("mouseout", eraserWidth);
-  document
-    .getElementById("eraser")
-    .addEventListener("click", () => (isPenInUse = false));
-  document
-    .getElementById("pen")
-    .addEventListener("click", () => (isPenInUse = true));
+  document.getElementById("range").addEventListener("mouseout", penWidth);
+
+  document.getElementById("eraser").addEventListener("click", () => {
+    isPenInUse = false;
+    isSquare = false;
+  });
+  document.getElementById("pen").addEventListener("click", () => {
+    isPenInUse = true;
+    isSquare = false;
+  });
+
+  document.getElementById("square").addEventListener("click", () => {
+    isSquare = true;
+    isPenInUse = false;
+  });
 });
 
+let isSquare = false;
 // initial mode = pen
 let isPenInUse = true;
 // stroke color
 let color;
 //stroke width for pen and eraser
-let penLine;
-let eraserLine;
+let penSize;
+// let eraserLine;
 
 // Stores the initial position of the cursor
 let mouse = { x: 0, y: 0 };
@@ -54,11 +60,11 @@ function customColor(e) {
 
 // line width function for pen and eraser
 function penWidth(e) {
-  penLine = e.target.value;
+  penSize = e.target.value;
 }
-function eraserWidth(e) {
-  eraserLine = e.target.value;
-}
+// function eraserWidth(e) {
+//   eraserLine = e.target.value;
+// }
 
 // mouse position
 function getPosition(e) {
@@ -87,11 +93,11 @@ function sketch(e) {
 
   ctx.beginPath();
   ctx.lineCap = "round";
+  ctx.lineWidth = penSize;
 
+  ctx.strokeStyle = color;
   // pen mode
-  if (isPenInUse) {
-    ctx.lineWidth = penLine;
-    ctx.strokeStyle = color;
+  if (isPenInUse === true && isSquare === false) {
     ctx.globalCompositeOperation = "source-over";
     ctx.moveTo(mouse.x, mouse.y);
     getPosition(e);
@@ -100,12 +106,20 @@ function sketch(e) {
     ctx.stroke();
   }
   // eraser mode
-  else {
-    ctx.lineWidth = eraserLine;
+  else if (isPenInUse === false && isSquare === false) {
+    // ctx.lineWidth = eraserLine;
     ctx.globalCompositeOperation = "destination-out";
     ctx.moveTo(mouse.x, mouse.y);
     getPosition(e);
     ctx.lineTo(mouse.x, mouse.y);
+    ctx.stroke();
+  }
+  // square mode
+  else if (isPenInUse === false && isSquare === true) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.beginPath();
+    ctx.rect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y);
     ctx.stroke();
   }
 }
@@ -113,16 +127,15 @@ function sketch(e) {
 // -------------save as image-------------------------
 
 // Convert canvas to image
-document.getElementById('saveImg').addEventListener("click", function() {
-
+document.getElementById("saveImg").addEventListener("click", function () {
   var dataURL = canvas.toDataURL("image/png");
 
-  saveAsImg(dataURL, 'untitled.png');
+  saveAsImg(dataURL, "untitled.png");
 });
 
 // Save | Download image
-function saveAsImg(data, filename = 'untitled.png') {
-  var a = document.createElement('a');
+function saveAsImg(data, filename = "untitled.png") {
+  var a = document.createElement("a");
   a.href = data;
   a.download = filename;
   document.body.appendChild(a);

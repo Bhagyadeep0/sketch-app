@@ -60,6 +60,14 @@ hr{
     font-size: 20px;
 }
 
+.colorBox{
+    font-size: 20px;
+}
+#customColor{
+    background: transparent;
+    border: none;
+}
+
 #canvas{
     background: white;
     border-radius: 6px;
