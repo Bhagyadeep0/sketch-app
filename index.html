@@ -26,8 +26,9 @@
               </div>
               <hr/>
               <div class="shape">
-                <button id="square">Square</button>
-                <button id="circle">Circle</button>
+                <button class="btn" id="squareBtn"><input type="radio" name="type" id="square"><label for="square">Square</label></button>
+                <button class="btn" id="circleBtn"><input type="radio" name="type" id="circle"><label for="circle">Circle</label></button>
+                <button class="btn" id="triangleBtn"><input type="radio" name="type" id="triangle"><label for="triangle">Triangle</label></button>
               </div>
             </li>
             <!-- paint mode -->
@@ -37,38 +38,28 @@
               </div>
               <hr/>
               <div class="shape">
-                <button id="pen">Pen</button>
-                <button id="eraser">Eraser</button>
+                <button class="btn" id="penBtn"><input checked type="radio" name="type" id="pen"><label for="pen">Pen</label></button>
+                <button class="btn" id="eraserBtn"><input type="radio" name="type" id="eraser"><label for="eraser">Eraser</label></button>
+                <div class="btn"><button id="fillBtn"><input type="checkbox" id="fill"></button><label for="fill">Fill</label></div>
               </div>
             </li>            
           </ul>
           <ul>
             <!-- custom line width -->
             <div id="draggable">
-              <!-- pen width -->
+              <!-- pen & eraser size -->
               <div class="penSize">
-                <label for="points">Pen Size</label>
+                <label>Pen Size</label>
+                <span id="penSizeValue">1</span>
                 <input
                 type="range"
                 id="range"
                 name="range"
                 value="1"
                 min="1"
-                max="200"
+                max="100"
                 />
               </div>
-              <!-- eraser width -->
-              <!-- <div class="eraserSize">
-                <label for="points">Eraser Size</label>
-                <input
-                type="range"
-                id="eraserRange"
-                name="range"
-                value="5"
-                min="5"
-                max="200"
-                />
-              </div> -->
             </div>
           </ul>
           <!-- color container -->
@@ -79,8 +70,8 @@
             </div>
           </div>
           <div class="canvasBtn">
-            <button id="reset">Clear Canvas</button>
-          <button id="saveImg">Save</button>
+            <button class="btn" id="clearCanvas">Clear Canvas</button>
+          <button class="btn" id="saveImg">Save</button>
           </div>
         </div>
   

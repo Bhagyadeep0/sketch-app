@@ -1,42 +1,48 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const square = document.getElementById("square");
-
 window.addEventListener("load", () => {
   resize();
   document.addEventListener("mousedown", startPaint);
   document.addEventListener("mouseup", stopPaint);
   document.addEventListener("mousemove", sketch);
   document
-    .getElementById("reset")
-    .addEventListener("click", () => location.reload()); // reset canvas
+    .getElementById("clearCanvas")
+    .addEventListener("click", ()=>{ctx.clearRect(0, 0, canvas.width, canvas.height)}); // clear canvas
 
   document
     .getElementById("customColor")
-    .addEventListener("mouseout", customColor);
+    .addEventListener("mouseleave", customColor);
   document.getElementById("range").addEventListener("mouseout", penWidth);
 
-  document.getElementById("eraser").addEventListener("click", () => {
-    isPenInUse = false;
-    isSquare = false;
+  document.getElementById("eraserBtn").addEventListener("click", () => {
+    activeTool = "eraser";
   });
-  document.getElementById("pen").addEventListener("click", () => {
-    isPenInUse = true;
-    isSquare = false;
+  document.getElementById("penBtn").addEventListener("click", () => {
+    activeTool = "pen";
   });
 
-  document.getElementById("square").addEventListener("click", () => {
-    isSquare = true;
-    isPenInUse = false;
+  document.getElementById("squareBtn").addEventListener("click", () => {
+    activeTool = "square";
+  });
+  document.getElementById("circleBtn").addEventListener("click", () => {
+    activeTool = "circle";
+  });
+  document.getElementById("triangleBtn").addEventListener("click", () => {
+    activeTool = "triangle";
+  });
+  document.getElementById("fillBtn").addEventListener("click", (e) => {
+    isFilled = !isFilled;
+    console.log(isFilled);
   });
 });
 
-let isSquare = false;
-// initial mode = pen
-let isPenInUse = true;
+// initial active tool = pen
+let activeTool = "pen";
+//initial fill value
+let isFilled = false;
 // stroke color
-let color;
+let color = "";
 //stroke width for pen and eraser
 let penSize;
 // let eraserLine;
@@ -47,33 +53,25 @@ let mouse = { x: 0, y: 0 };
 // initial paint state
 let paint = false;
 
-// resize canvas on load
+// ----------------------resize canvas on load-----------------------
 function resize() {
   canvas.width = window.innerWidth - 500;
   canvas.height = window.innerHeight - 100;
 }
 
-//custom color function
+//------------------custom color function--------------------
 function customColor(e) {
   color = e.target.value;
 }
 
-// line width function for pen and eraser
+// -----------------line width function for pen and eraser-------------
 function penWidth(e) {
   penSize = e.target.value;
+  document.getElementById("penSizeValue").innerText = penSize; // display pen size
 }
-// function eraserWidth(e) {
-//   eraserLine = e.target.value;
-// }
 
-// mouse position
+// -----------------mouse position--------------------
 function getPosition(e) {
-  // position change on scroll
-  if (window.scrollY >= 50) {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-    return;
-  }
   mouse.x = e.clientX - canvas.offsetLeft;
   mouse.y = e.clientY - canvas.offsetTop;
 }
@@ -87,39 +85,64 @@ function stopPaint() {
   paint = false;
 }
 
-// starts sketching
+// ----------------------------starts sketching-----------------------
 function sketch(e) {
   if (!paint) return;
 
   ctx.beginPath();
   ctx.lineCap = "round";
   ctx.lineWidth = penSize;
-
   ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+
   // pen mode
-  if (isPenInUse === true && isSquare === false) {
+  if (activeTool === "pen") {
     ctx.globalCompositeOperation = "source-over";
     ctx.moveTo(mouse.x, mouse.y);
     getPosition(e);
     ctx.lineTo(mouse.x, mouse.y);
-
     ctx.stroke();
   }
+
+  // square mode
+  else if (activeTool === "square") {
+    ctx.clearRect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.beginPath();
+    ctx.rect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y);
+    isFilled ? ctx.fill() : ctx.stroke(); // check if fill is active
+  }
+  // circle mode
+  else if (activeTool === "circle") {
+    ctx.globalCompositeOperation = "source-over";
+    // ctx.clearCircle(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y, 0, 2 * Math.PI);
+    ctx.arc(
+      mouse.x,
+      mouse.y,
+      e.offsetX - mouse.x,
+      e.offsetY - mouse.y,
+      0,
+      2 * Math.PI
+    );
+    isFilled ? ctx.fill() : ctx.stroke(); // check if fill is active
+  }
+  // triangle mode
+  else if (activeTool === "triangle") {
+    ctx.globalCompositeOperation = "source-over";
+    // ctx.clearCircle(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y, 0, 2 * Math.PI);
+    ctx.moveTo(mouse.x, mouse.y);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(mouse.x *2 - e.offsetX, e.offsetY);
+    ctx.closePath();
+    isFilled ? ctx.fill() : ctx.stroke(); // check if fill is active
+  }
   // eraser mode
-  else if (isPenInUse === false && isSquare === false) {
+  else if (activeTool === "eraser") {
     // ctx.lineWidth = eraserLine;
     ctx.globalCompositeOperation = "destination-out";
     ctx.moveTo(mouse.x, mouse.y);
     getPosition(e);
     ctx.lineTo(mouse.x, mouse.y);
-    ctx.stroke();
-  }
-  // square mode
-  else if (isPenInUse === false && isSquare === true) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.globalCompositeOperation = "source-over";
-    ctx.beginPath();
-    ctx.rect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y);
     ctx.stroke();
   }
 }

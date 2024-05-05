@@ -71,12 +71,20 @@ hr{
 #canvas{
     background: white;
     border-radius: 6px;
+    overflow: hidden;
 }
 .canvasBtn{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
+}
+.shape div{
+    display: flex;
+    align-items: center;
+}
+.shape div label{
+    font-size: 25px;
 }
 h1{
     text-align: center;
@@ -89,8 +97,13 @@ h2{
     font-size: 30px;
     color: black;
 }
-/* all buttons style starts */
+/* all .btns style starts */
 button{
+    background: transparent;
+    outline: none;
+    border: none;
+}
+.btn{
     background: transparent;
     border: 0.5px solid gray;
     border-radius: 6px;
@@ -98,14 +111,15 @@ button{
     padding: 2px 3px;
     outline: none;
     font-size: 25px;
-    width: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
 }
-button:hover,button:focus,button:active{
+.btn:hover,.btn:focus,.btn:active{
     background: white;
 }
-/* all buttons style ends */
+/* all .btns style ends */
+
+
 
 
 
@@ -115,7 +129,7 @@ input[type=range] {
     appearance: none;
     -webkit-appearance: none;
     margin: 10px 0;
-    width: 50%;
+    width: 100%;
 }
 
 input[type=range]:focus {
