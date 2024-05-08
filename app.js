@@ -1,14 +1,14 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-window.addEventListener("load", () => {
-  resize();
+resize();
+canvas.addEventListener("mousedown", () => {
   document.addEventListener("mousedown", startPaint);
   document.addEventListener("mouseup", stopPaint);
   document.addEventListener("mousemove", sketch);
-  document
-    .getElementById("clearCanvas")
-    .addEventListener("click", ()=>{ctx.clearRect(0, 0, canvas.width, canvas.height)}); // clear canvas
+  document.getElementById("clearCanvas").addEventListener("click", () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }); // clear canvas
 
   document
     .getElementById("customColor")
@@ -36,7 +36,12 @@ window.addEventListener("load", () => {
     console.log(isFilled);
   });
 });
-
+canvas.addEventListener("click",()=>{
+ prevX = mouse.x
+prevY = mouse.y
+})
+let prevX 
+  let prevY 
 // initial active tool = pen
 let activeTool = "pen";
 //initial fill value
@@ -90,7 +95,7 @@ function sketch(e) {
   if (!paint) return;
 
   ctx.beginPath();
-  ctx.lineCap = "round";
+  // ctx.lineCap = "round";
   ctx.lineWidth = penSize;
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
@@ -106,9 +111,25 @@ function sketch(e) {
 
   // square mode
   else if (activeTool === "square") {
-    ctx.clearRect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y);
+    // alert(prevX+"::" +prevY)
+    mouse.x > 300 || mouse.y > 300
+      ? ctx.clearRect(
+          mouse.x,
+          mouse.y,
+          e.offsetX + mouse.x,
+          e.offsetY + mouse.y
+        )
+      : ctx.clearRect(
+          mouse.x,
+          mouse.y,
+          e.offsetX - mouse.x,
+          e.offsetY - mouse.y
+        );
     ctx.globalCompositeOperation = "source-over";
     ctx.beginPath();
+    // mouse.x > prevX || mouse.y > prevY
+    //   ? ctx.rect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y)
+    //   : ctx.rect(mouse.x, mouse.y, e.offsetX + mouse.x, e.offsetY + mouse.y);
     ctx.rect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y);
     isFilled ? ctx.fill() : ctx.stroke(); // check if fill is active
   }
@@ -132,7 +153,7 @@ function sketch(e) {
     // ctx.clearCircle(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y, 0, 2 * Math.PI);
     ctx.moveTo(mouse.x, mouse.y);
     ctx.lineTo(e.offsetX, e.offsetY);
-    ctx.lineTo(mouse.x *2 - e.offsetX, e.offsetY);
+    ctx.lineTo(mouse.x * 2 - e.offsetX, e.offsetY);
     ctx.closePath();
     isFilled ? ctx.fill() : ctx.stroke(); // check if fill is active
   }

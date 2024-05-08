@@ -120,6 +120,10 @@ button{
 /* all .btns style ends */
 
 
+#squareBtn{
+    background: yellow;
+    cursor: pointer;
+}
 
 
 
