@@ -1,82 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-    <script defer src="app.js"></script>
-    <title>Draw</title>
-  </head>
-  <body>
-      <div class="wrapper">
-        <div class="content">
-          <div><h1>Drawing Tools</h1></div>
-          <hr/>
-          <ul class="list">
-            <!-- shapes -->
-            <li>
-              <div>
-                <h2>Shape</h2>
-              </div>
-              <hr/>
-              <div class="shape">
-                <button class="btn" id="squareBtn"><input type="radio" name="type" id="square"><label for="square">Square</label></button>
-                <button class="btn" id="circleBtn"><input type="radio" name="type" id="circle"><label for="circle">Circle</label></button>
-                <button class="btn" id="triangleBtn"><input type="radio" name="type" id="triangle"><label for="triangle">Triangle</label></button>
-              </div>
-            </li>
-            <!-- paint mode -->
-            <li>
-              <div>
-                <h2>Mode</h2>
-              </div>
-              <hr/>
-              <div class="shape">
-                <button class="btn" id="penBtn"><input checked type="radio" name="type" id="pen"><label for="pen">Pen</label></button>
-                <button class="btn" id="eraserBtn"><input type="radio" name="type" id="eraser"><label for="eraser">Eraser</label></button>
-                <div class="btn"><button id="fillBtn"><input type="checkbox" id="fill"></button><label for="fill">Fill</label></div>
-              </div>
-            </li>            
-          </ul>
-          <ul>
-            <!-- custom line width -->
-            <div id="draggable">
-              <!-- pen & eraser size -->
-              <div class="penSize">
-                <label>Pen Size</label>
-                <span id="penSizeValue">1</span>
-                <input
-                type="range"
-                id="range"
-                name="range"
-                value="1"
-                min="1"
-                max="100"
-                />
-              </div>
-            </div>
-          </ul>
-          <!-- color container -->
-          <div class="colorBox-container">
-            <div class="colorBox">
-              <label>Color</label>
-              <input type="color" name="color" id="customColor" />
-            </div>
-          </div>
-          <div class="canvasBtn">
-            <button class="btn" id="clearCanvas">Clear Canvas</button>
-          <button class="btn" id="saveImg">Save</button>
-          </div>
-        </div>
-  
-        <canvas id="canvas"></canvas>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script defer src="app.js"></script>
+  <title>Draw</title>
+</head>
+
+<body>
+  <div class="wrapper">
+    <section class="tool-board">
+
+      <div class="row">
+        <!-- shapes row -->
+        <h1 class="title">Shapes</h1>
+        <ul class="shapes">
+          <li class="shape"><img src="/img/square.png" alt="square img"><span>Square</span></li>
+          <li class="shape"><img src="/img/circle.png" alt="square img"><span>Square</span></li>
+          <li class="shape"><img src="/img/triangle.png" alt="square img"><span>Square</span></li>
+          <li><input type="checkbox" name="fill" id="fill"><label class="fill" for="fill">Fill</label></li>
+        </ul>
+        <hr />
+        <!-- modes row -->
+        <h1 class="title">Mode</h1>
+        <ul class="modes">
+          <li class="mode active"><img src="/img/pen.png" alt="square img"><span>Square</span></li>
+          <li class="mode"><img src="/img/eraser.png" alt="square img"><span>Square</span></li>
+          <li><label for="lineWidth">Line Width</label> <input type="range" name="lineWidth" id="lineWidth" value="5"
+              max="100" min="1"><span>5</span></li>
+        </ul>
+        <hr />
+        <!-- colors row -->
+        <h1 class="title">Colors</h1>
+        <ul class="colors">
+          <span>
+            <li class="color">Red</li>
+            <li class="color">Blue</li>
+            <li class="color">Green</li>
+            <li class="color">Black</li>
+            <li class="color">White</li>
+          </span>
+         <span> <li class="customColor"><input type="color"> <span>Custom</span></li></span>
+        </ul>
       </div>
-    </div>
-  </body>
+      <hr />
+      <!-- buttons row -->
+      <div class=" row btn">
+        <button><img src="/img/clear.png" alt=""><span>Clear Canvas</span></button>
+        <button><img src="/img/save.png" alt=""><span>Save As Image</span></button>
+      </div>
+    </section>
+    <section class="drawing-board">
+      <canvas id="canvas"></canvas>
+    </section>
+  </div>
+</body>
+
 </html>
