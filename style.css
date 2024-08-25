@@ -1,14 +1,19 @@
-*{
-    margin: 0;padding: 0;box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-body{
+
+body {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
     background-color: rgb(0, 0, 92);
+    font-family: 'Poppins', sans-serif;
 }
-.wrapper{
+
+.wrapper {
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -18,13 +23,15 @@ body{
     max-width: 1700px;
     color: white;
 }
-.tool-board{
-    background-color: rgb(255,255,255,0.5);
+
+.tool-board {
+    background-color: rgba(255, 255, 255, 0.5);
     padding: 5px 10px;
     border-radius: 6px;
+    min-width: 200px;
 }
 
-.tool-board ul li ,button{
+.tool-board ul li, button {
     display: flex;
     align-items: center;
     list-style: none;
@@ -35,21 +42,25 @@ body{
     border-radius: 5px;
     transition: background 0.3s ease;
 }
-.tool-board ul li:is(:hover,.active) ,button:is(:hover,.active){
-    background: rgba(128, 128, 128,0.9);
+
+.tool-board ul li:is(:hover, .active), button:is(:hover, .active) {
+    background: rgba(128, 128, 128, 0.9);
 }
-.tool-board *{
-margin-bottom: 10px;
+
+.tool-board * {
+    margin-bottom: 10px;
 }
-.row img{
+
+.row img {
     width: 30px;
     margin-right: 10px;
 }
-.row span,input,label{
+
+.row span, input, label {
     margin-left: 5px;
 }
 
-.title{
+.title {
     text-align: center;
     font-size: 30px;
     font-weight: 500;
@@ -57,72 +68,66 @@ margin-bottom: 10px;
     padding-top: 10px;
 }
 
-#fill:checked~label{
-color: blue;
+#fill:checked ~ label {
+    color: blue;
 }
-#lineWidth{
+
+#lineWidth {
     width: 100%;
     height: 5px;
     border-radius: 8px;
     border: none;
     outline: none;
 }
-.colors span{
+
+.colors span {
     display: flex;
     justify-content: space-around;
     align-items: center;
     gap: 10px 0;
 }
-.color{
+
+.color {
     margin-right: 5px;
+    padding: 5px;
+    border-radius: 5px;
 }
-.color:nth-child(1){
-    background-color: red;
-}
-.color:nth-child(2){
-    background-color: blue;
-}
-.color:nth-child(3){
-    background-color: green;
-}
-.color:nth-child(4){
-    background-color: black;
-}
-.color:nth-child(5){
-    background-color: white;
-    color: black;
-}
-.customColor{
-    background:none;
+
+.customColor {
+    background: none;
     outline: none;
     border: none;
 }
-.row button{
+
+.row button {
     border: none;
 }
-.btn{
+
+.btn {
     margin-top: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.row button img{
+
+.row button img {
     width: 30px;
 }
-hr{
+
+hr {
     margin: 10px 0;
 }
 
-
-
-
-
-.drawing-board{
+.drawing-board {
     flex: 1;
     background-color: white;
     border-radius: 6px;
+    position: relative;
 }
-#canvas{
+
+#canvas {
     border: 2px solid black;
+    width: 100%;
+    height: 100%;
 }

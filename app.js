@@ -1,187 +1,138 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-resize();
-canvas.addEventListener("mousedown", () => {
-  document.addEventListener("mousedown", startPaint);
-  document.addEventListener("mouseup", stopPaint);
-  document.addEventListener("mousemove", sketch);
-  document.getElementById("clearCanvas").addEventListener("click", () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }); // clear canvas
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
-  document
-    .getElementById("customColor")
-    .addEventListener("mouseleave", customColor);
-  document.getElementById("range").addEventListener("mouseout", penWidth);
-
-  document.getElementById("eraserBtn").addEventListener("click", () => {
-    activeTool = "eraser";
-  });
-  document.getElementById("penBtn").addEventListener("click", () => {
-    activeTool = "pen";
-  });
-
-  document.getElementById("squareBtn").addEventListener("click", () => {
-    activeTool = "square";
-  });
-  document.getElementById("circleBtn").addEventListener("click", () => {
-    activeTool = "circle";
-  });
-  document.getElementById("triangleBtn").addEventListener("click", () => {
-    activeTool = "triangle";
-  });
-  document.getElementById("fillBtn").addEventListener("click", (e) => {
-    isFilled = !isFilled;
-    console.log(isFilled);
-  });
-});
-canvas.addEventListener("click",()=>{
- prevX = mouse.x
-prevY = mouse.y
-})
-let prevX 
-  let prevY 
-// initial active tool = pen
 let activeTool = "pen";
-//initial fill value
 let isFilled = false;
-// stroke color
-let color = "";
-//stroke width for pen and eraser
-let penSize;
-// let eraserLine;
-
-// Stores the initial position of the cursor
+let color = "black";
+let penSize = 5;
+let isPainting = false;
 let mouse = { x: 0, y: 0 };
+let startX, startY;
 
-// initial paint state
-let paint = false;
+// Event listeners
+document.querySelectorAll(".mode").forEach(mode => mode.addEventListener("click", activateMode));
+document.querySelectorAll(".color").forEach(colorEl => colorEl.addEventListener("click", selectColor));
+document.querySelector(".customColor input").addEventListener("input", selectCustomColor);
+document.getElementById("lineWidth").addEventListener("input", changePenSize);
+document.getElementById("fill").addEventListener("change", toggleFill);
+canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mousemove", draw);
+document.getElementById("clearCanvas").addEventListener("click", clearCanvas);
+document.getElementById("saveImg").addEventListener("click", saveAsImage);
 
-// ----------------------resize canvas on load-----------------------
-function resize() {
-  canvas.width = window.innerWidth - 500;
-  canvas.height = window.innerHeight - 100;
+function resizeCanvas() {
+    canvas.width = window.innerWidth - 500;
+    canvas.height = window.innerHeight - 100;
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-//------------------custom color function--------------------
-function customColor(e) {
-  color = e.target.value;
+function activateMode(e) {
+    document.querySelectorAll(".mode").forEach(mode => mode.classList.remove("active"));
+    e.target.closest("li").classList.add("active");
+    activeTool = e.target.closest("li").id.replace("Btn", "");
 }
 
-// -----------------line width function for pen and eraser-------------
-function penWidth(e) {
-  penSize = e.target.value;
-  document.getElementById("penSizeValue").innerText = penSize; // display pen size
+function selectColor(e) {
+    color = e.target.style.backgroundColor;
 }
 
-// -----------------mouse position--------------------
-function getPosition(e) {
-  mouse.x = e.clientX - canvas.offsetLeft;
-  mouse.y = e.clientY - canvas.offsetTop;
+function selectCustomColor(e) {
+    color = e.target.value;
 }
 
-function startPaint(e) {
-  paint = true;
-  getPosition(e);
+function changePenSize(e) {
+    penSize = e.target.value;
+    document.getElementById("penSizeValue").innerText = penSize;
 }
 
-function stopPaint() {
-  paint = false;
+function toggleFill() {
+    isFilled = !isFilled;
 }
 
-// ----------------------------starts sketching-----------------------
-function sketch(e) {
-  if (!paint) return;
+function getMousePosition(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+    };
+}
 
+function startDrawing(e) {
+  isPainting = true;
+  const pos = getMousePosition(e);
+  startX = pos.x;
+  startY = pos.y;
   ctx.beginPath();
-  // ctx.lineCap = "round";
-  ctx.lineWidth = penSize;
-  ctx.strokeStyle = color;
-  ctx.fillStyle = color;
+}
 
-  // pen mode
-  if (activeTool === "pen") {
-    ctx.globalCompositeOperation = "source-over";
-    ctx.moveTo(mouse.x, mouse.y);
-    getPosition(e);
-    ctx.lineTo(mouse.x, mouse.y);
-    ctx.stroke();
-  }
+function stopDrawing() {
+  isPainting = false;
+  ctx.closePath();
+}
 
-  // square mode
-  else if (activeTool === "square") {
-    // alert(prevX+"::" +prevY)
-    mouse.x > 300 || mouse.y > 300
-      ? ctx.clearRect(
-          mouse.x,
-          mouse.y,
-          e.offsetX + mouse.x,
-          e.offsetY + mouse.y
-        )
-      : ctx.clearRect(
-          mouse.x,
-          mouse.y,
-          e.offsetX - mouse.x,
-          e.offsetY - mouse.y
-        );
-    ctx.globalCompositeOperation = "source-over";
+function draw(e) {
+  if (!isPainting) return;
+  const pos = getMousePosition(e);
+  ctx.linecap ="round"
+    ctx.lineWidth = penSize;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+
+    switch (activeTool) {
+        case "pen":
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            break;
+        case "eraser":
+            ctx.strokeStyle = "white";
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            break;
+    }
+}
+
+function drawShape(type, x, y, size) {
     ctx.beginPath();
-    // mouse.x > prevX || mouse.y > prevY
-    //   ? ctx.rect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y)
-    //   : ctx.rect(mouse.x, mouse.y, e.offsetX + mouse.x, e.offsetY + mouse.y);
-    ctx.rect(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y);
-    isFilled ? ctx.fill() : ctx.stroke(); // check if fill is active
-  }
-  // circle mode
-  else if (activeTool === "circle") {
-    ctx.globalCompositeOperation = "source-over";
-    // ctx.clearCircle(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y, 0, 2 * Math.PI);
-    ctx.arc(
-      mouse.x,
-      mouse.y,
-      e.offsetX - mouse.x,
-      e.offsetY - mouse.y,
-      0,
-      2 * Math.PI
-    );
-    isFilled ? ctx.fill() : ctx.stroke(); // check if fill is active
-  }
-  // triangle mode
-  else if (activeTool === "triangle") {
-    ctx.globalCompositeOperation = "source-over";
-    // ctx.clearCircle(mouse.x, mouse.y, e.offsetX - mouse.x, e.offsetY - mouse.y, 0, 2 * Math.PI);
-    ctx.moveTo(mouse.x, mouse.y);
-    ctx.lineTo(e.offsetX, e.offsetY);
-    ctx.lineTo(mouse.x * 2 - e.offsetX, e.offsetY);
-    ctx.closePath();
-    isFilled ? ctx.fill() : ctx.stroke(); // check if fill is active
-  }
-  // eraser mode
-  else if (activeTool === "eraser") {
-    // ctx.lineWidth = eraserLine;
-    ctx.globalCompositeOperation = "destination-out";
-    ctx.moveTo(mouse.x, mouse.y);
-    getPosition(e);
-    ctx.lineTo(mouse.x, mouse.y);
-    ctx.stroke();
-  }
+    switch (type) {
+        case "square":
+            if (isFilled) ctx.fillRect(x, y, size, size);
+            else ctx.strokeRect(x, y, size, size);
+            break;
+        case "circle":
+            ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+            if (isFilled) ctx.fill();
+            else ctx.stroke();
+            break;
+        case "triangle":
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + size / 2, y + size);
+            ctx.lineTo(x - size / 2, y + size);
+            ctx.closePath();
+            if (isFilled) ctx.fill();
+            else ctx.stroke();
+            break;
+    }
 }
 
-// -------------save as image-------------------------
-
-// Convert canvas to image
-document.getElementById("saveImg").addEventListener("click", function () {
-  var dataURL = canvas.toDataURL("image/png");
-
-  saveAsImg(dataURL, "untitled.png");
-});
-
-// Save | Download image
-function saveAsImg(data, filename = "untitled.png") {
-  var a = document.createElement("a");
-  a.href = data;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
+
+function saveAsImage() {
+    const link = document.createElement("a");
+    link.download = "canvas-image.png";
+    link.href = canvas.toDataURL();
+    link.click();
+}
+
+// Shape buttons
+document.querySelector(".square").addEventListener("click", () => drawShape("square", mouse.x, mouse.y, 500));
+document.querySelector(".circle").addEventListener("click", () => drawShape("circle", startX, startY, 100));
+document.querySelector(".triangle").addEventListener("click", () => drawShape("triangle", startX, startY, 100));

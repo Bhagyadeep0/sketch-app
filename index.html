@@ -1,63 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
   <script defer src="app.js"></script>
   <title>Draw</title>
 </head>
-
 <body>
   <div class="wrapper">
     <section class="tool-board">
-
       <div class="row">
-        <!-- shapes row -->
         <h1 class="title">Shapes</h1>
         <ul class="shapes">
-          <li class="shape"><img src="/img/square.png" alt="square img"><span>Square</span></li>
-          <li class="shape"><img src="/img/circle.png" alt="square img"><span>Square</span></li>
-          <li class="shape"><img src="/img/triangle.png" alt="square img"><span>Square</span></li>
-          <li><input type="checkbox" name="fill" id="fill"><label class="fill" for="fill">Fill</label></li>
+          <li class="square"><img src="/img/square.png" alt="Square"><span>Square</span></li>
+          <li class="circle"><img src="/img/circle.png" alt="Circle"><span>Circle</span></li>
+          <li class="triangle"><img src="/img/triangle.png" alt="Triangle"><span>Triangle</span></li>
+          <li>
+            <input type="checkbox" name="fill" id="fill">
+            <label class="fill" for="fill">Fill</label>
+          </li>
         </ul>
-        <hr />
-        <!-- modes row -->
+        <hr>
         <h1 class="title">Mode</h1>
         <ul class="modes">
-          <li class="mode active"><img src="/img/pen.png" alt="square img"><span>Square</span></li>
-          <li class="mode"><img src="/img/eraser.png" alt="square img"><span>Square</span></li>
-          <li><label for="lineWidth">Line Width</label> <input type="range" name="lineWidth" id="lineWidth" value="5"
-              max="100" min="1"><span>5</span></li>
+          <li class="mode active" id="penBtn"><img src="/img/pen.png" alt="Pen"><span>Pen</span></li>
+          <li class="mode" id="eraserBtn"><img src="/img/eraser.png" alt="Eraser"><span>Eraser</span></li>
+          <li>
+            <label for="lineWidth">Line Width</label>
+            <input type="range" name="lineWidth" id="lineWidth" value="5" max="100" min="1">
+            <span id="penSizeValue">5</span>
+          </li>
         </ul>
-        <hr />
-        <!-- colors row -->
+        <hr>
         <h1 class="title">Colors</h1>
         <ul class="colors">
           <span>
-            <li class="color">Red</li>
-            <li class="color">Blue</li>
-            <li class="color">Green</li>
-            <li class="color">Black</li>
-            <li class="color">White</li>
+            <li class="color" style="background-color: red;">Red</li>
+            <li class="color" style="background-color: blue;">Blue</li>
+            <li class="color" style="background-color: green;">Green</li>
+            <li class="color" style="background-color: black;">Black</li>
+            <li class="color" style="background-color: white; color: black;">White</li>
           </span>
-         <span> <li class="customColor"><input type="color"> <span>Custom</span></li></span>
+          <span>
+            <li class="customColor"><input type="color"> <span>Custom</span></li>
+          </span>
         </ul>
       </div>
-      <hr />
-      <!-- buttons row -->
-      <div class=" row btn">
-        <button><img src="/img/clear.png" alt=""><span>Clear Canvas</span></button>
-        <button><img src="/img/save.png" alt=""><span>Save As Image</span></button>
+      <hr>
+      <div class="row btn">
+        <button id="clearCanvas"><img src="/img/clear.png" alt="Clear"><span>Clear Canvas</span></button>
+        <button id="saveImg"><img src="/img/save.png" alt="Save"><span>Save As Image</span></button>
       </div>
     </section>
     <section class="drawing-board">
@@ -65,5 +62,4 @@
     </section>
   </div>
 </body>
-
 </html>
