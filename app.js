@@ -33,8 +33,8 @@ canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mousemove", draw);
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth ;
-  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth -500;
+  canvas.height = window.innerHeight -100;
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
