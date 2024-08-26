@@ -11,7 +11,7 @@ let color = "black";
 let penSize = 5;
 let isPainting = false;
 let mouse = { x: 0, y: 0 };
-let startX, startY ,snapshot;
+let startX, startY, snapshot;
 
 // ------------------Event listeners----------------
 document
@@ -33,8 +33,8 @@ canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mousemove", draw);
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth - 500;
-  canvas.height = window.innerHeight - 100;
+  canvas.width = window.innerWidth - canvas.offsetWidth;
+  canvas.height = window.innerHeight - canvas.offsetHeight;
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
@@ -83,7 +83,7 @@ function startDrawing(e) {
   ctx.beginPath();
   ctx.moveTo(pos.x, pos.y);
   // copying canvas data and passing it as snapshot value to avoid image dragging
-  snapshot = ctx.getImageData(0,0,canvas.width,canvas.height)
+  snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
 }
 
 function stopDrawing() {
@@ -99,8 +99,10 @@ function draw(e) {
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
   // adding canvas data
-  ctx.putImageData(snapshot,0,0);
+  ctx.putImageData(snapshot, 0, 0);
 
+
+//   switch case to switch between different modes
   switch (activeTool) {
     case "pen":
       ctx.lineTo(pos.x, pos.y);
@@ -112,27 +114,34 @@ function draw(e) {
       ctx.stroke();
       break;
     case "square":
-      if (isFilled)  ctx.fillRect(pos.x, pos.y, startX-pos.x, startY-pos.y);
-      else ctx.strokeRect(pos.x, pos.y, startX-pos.x, startY-pos.y);
+      //-----------------------(x, y, width, height)
+      if (isFilled) ctx.fillRect(pos.x, pos.y, startX - pos.x, startY - pos.y);
+      else ctx.strokeRect(pos.x, pos.y, startX - pos.x, startY - pos.y);
       break;
     case "circle":
-        ctx.beginPath();
-      let radius = Math.sqrt(Math.pow((startX-pos.x),2)+Math.pow((startY-pos.y),2))
-      ctx.arc(startX, startY,radius,0, Math.PI * 2);
+      // creates new path for circle
+      ctx.beginPath();
+      // getting radius according to mouse pointer
+      let radius = Math.sqrt(
+        Math.pow(startX - pos.x, 2) + Math.pow(startY - pos.y, 2)
+      );
+      // --------  arc(x, y, radius, startAngle, endAngle, counterclockwise)
+      ctx.arc(startX, startY, radius, 0, Math.PI * 2);
       if (isFilled) ctx.fill();
       else ctx.stroke();
       break;
     case "triangle":
-      ctx.moveTo(pos.x, pos.y);
-      ctx.lineTo(pos.x + startX-pos.x, pos.y + startY-pos.y);
-      ctx.lineTo(pos.x + startX-pos.x, pos.y + startY-pos.y);
+        // creates new path for triangle
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.lineTo(startX * 2 - pos.x, pos.y);
       ctx.closePath();
       if (isFilled) ctx.fill();
       else ctx.stroke();
       break;
   }
 }
-
 
 function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
