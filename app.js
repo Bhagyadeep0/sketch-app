@@ -116,7 +116,9 @@ function draw(e) {
       else ctx.strokeRect(pos.x, pos.y, startX-pos.x, startY-pos.y);
       break;
     case "circle":
-      ctx.arc(startX, startY, pos.x-startX, pos.y-startY, Math.PI * 2);
+        ctx.beginPath();
+      let radius = Math.sqrt(Math.pow((startX-pos.x),2)+Math.pow((startY-pos.y),2))
+      ctx.arc(startX, startY,radius,0, Math.PI * 2);
       if (isFilled) ctx.fill();
       else ctx.stroke();
       break;
