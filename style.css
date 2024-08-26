@@ -9,7 +9,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: rgb(0, 0, 92);
+    background-color: rgb(0, 0, 80);
     font-family: 'Poppins', sans-serif;
 }
 
@@ -69,7 +69,7 @@ body {
 }
 
 #fill:checked ~ label {
-    color: blue;
+    color:  blue;
 }
 
 #lineWidth {
