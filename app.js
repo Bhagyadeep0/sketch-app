@@ -33,8 +33,8 @@ canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mousemove", draw);
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth - canvas.offsetWidth;
-  canvas.height = window.innerHeight - canvas.offsetHeight;
+  canvas.width = window.innerWidth ;
+  canvas.height = window.innerHeight;
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
@@ -101,8 +101,6 @@ function draw(e) {
   // adding canvas data
   ctx.putImageData(snapshot, 0, 0);
 
-
-//   switch case to switch between different modes
   switch (activeTool) {
     case "pen":
       ctx.lineTo(pos.x, pos.y);
